@@ -15,6 +15,8 @@ func postMessage(api *slack.Client, channelID, text string) (string, string, err
 	params := slack.NewPostMessageParameters()
 	params.LinkNames = 1
 	msgOption := slack.MsgOptionCompose(
+		slack.MsgOptionUsername("今日のおすすめチャンネル"),
+		slack.MsgOptionIconEmoji("tada"),
 		slack.MsgOptionText(text, false),
 		slack.MsgOptionPostMessageParameters(params),
 	)
@@ -52,6 +54,6 @@ func main () {
 	rand.Seed(time.Now().UnixNano())
 	index := rand.Intn(len(channelNames))
 	todaysRecommendChannel := channelNames[index]
-	text := fmt.Sprintf("今日のおすすめSlackチャンネルは……これ！！！！👉👉👉👉👉 %s\n", todaysRecommendChannel)
+	text := fmt.Sprintf("今日のおすすめチャンネルは……これ！！！！👉👉👉👉👉 %s 👈👈👈👈👈\n", todaysRecommendChannel)
 	postMessage(api, postChannelID, text)
 }
