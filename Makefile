@@ -1,8 +1,9 @@
+SRC=main.go
 OUT=build/main
 
-all:
+$(OUT): $(SRC)
 	go build -o $(OUT)
 
 .PHONY: run
-run: all
+run: $(OUT)
 	$(OUT)
