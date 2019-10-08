@@ -28,6 +28,21 @@ func chooseChannel(channelNames []string) string {
 	return channelNames[index]
 }
 
+func filterChannels(channels []slack.Channel) []slack.Channel {
+	var filtered []slack.Channel
+	for _, channel := range channels {
+		conversation := channel.GroupConversation.Conversation
+		if conversation.NumMembers > 20 {
+			continue
+		}
+		if conversation.IsPrivate {
+			continue
+		}
+		filtered = append(filtered, channel)
+	}
+	return filtered
+}
+
 func doIt() {
 	apiKey, ok := os.LookupEnv("SLACK_TOKEN")
 	if !ok {
@@ -44,6 +59,8 @@ func doIt() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	channels = filterChannels(channels)
+	log.Printf("number of target channels is %d\n", len(channels))
 
 	channelNames := make([]string, len(channels))
 	for i, channel := range channels {
