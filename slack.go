@@ -22,6 +22,12 @@ func postMessage(api *slack.Client, channelID, text string) (string, string, err
 	return api.PostMessage(channelID, msgOption)
 }
 
+func chooseChannel(channelNames []string) string {
+	rand.Seed(time.Now().UnixNano())
+	index := rand.Intn(len(channelNames))
+	return channelNames[index]
+}
+
 func doIt() {
 	apiKey, ok := os.LookupEnv("SLACK_TOKEN")
 	if !ok {
@@ -45,9 +51,7 @@ func doIt() {
 		channelNames[i] = fmt.Sprintf("#%s", channelName)
 	}
 
-	rand.Seed(time.Now().UnixNano())
-	index := rand.Intn(len(channelNames))
-	todaysRecommendChannel := channelNames[index]
+	todaysRecommendChannel := chooseChannel(channelNames)
 	text := fmt.Sprintf("今日のおすすめチャンネルは……これ！！！！👉👉👉👉👉 %s 👈👈👈👈👈", todaysRecommendChannel)
 	log.Printf("post %s to %s", text, postChannelID)
 	postMessage(api, postChannelID, text)
