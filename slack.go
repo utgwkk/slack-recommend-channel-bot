@@ -32,6 +32,9 @@ func filterChannels(channels []slack.Channel) []slack.Channel {
 	var filtered []slack.Channel
 	for _, channel := range channels {
 		conversation := channel.GroupConversation.Conversation
+		if channel.IsGeneral {
+			continue
+		}
 		if conversation.NumMembers > 20 {
 			continue
 		}
