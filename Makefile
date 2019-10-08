@@ -1,4 +1,4 @@
-SRC=main.go
+SRC=main.go slack.go
 OUT=build/main
 
 $(OUT): $(SRC)
