@@ -64,7 +64,7 @@ func doIt() {
 
 	channelNames := make([]string, len(channels))
 	for i, channel := range channels {
-		channelName := channel.GroupConversation.Conversation.NameNormalized
+		channelName := channel.Name
 		channelNames[i] = fmt.Sprintf("#%s", channelName)
 	}
 
