@@ -2,8 +2,12 @@ SRC=main.go
 OUT=build/main
 
 $(OUT): $(SRC)
-	go build -o $(OUT)
+	env GO111MODULE=on go build -o $(OUT)
 
 .PHONY: run
 run: $(OUT)
 	$(OUT)
+
+.PHONY: clean
+clean:
+	rm -f $(OUT)
