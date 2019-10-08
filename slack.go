@@ -43,7 +43,7 @@ func filterChannels(channels []slack.Channel) []slack.Channel {
 	return filtered
 }
 
-func doIt() {
+func doIt(dryRun bool) {
 	apiKey, ok := os.LookupEnv("SLACK_TOKEN")
 	if !ok {
 		log.Fatalln("API key not set in SLACK_TOKEN")
@@ -70,6 +70,9 @@ func doIt() {
 
 	todaysRecommendChannel := chooseChannel(channelNames)
 	text := fmt.Sprintf("今日のおすすめチャンネルは……これ！！！！👉👉👉👉👉 %s 👈👈👈👈👈", todaysRecommendChannel)
-	log.Printf("post %s to %s", text, postChannelID)
-	postMessage(api, postChannelID, text)
+	log.Printf("message: %s", text)
+	if !dryRun {
+		log.Printf("post %s to %s", text, postChannelID)
+		postMessage(api, postChannelID, text)
+	}
 }
