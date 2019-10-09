@@ -46,6 +46,21 @@ func filterChannels(channels []slack.Channel) []slack.Channel {
 	return filtered
 }
 
+func buildText(channel string) string {
+	var aisatsu string
+	now := time.Now()
+	if 5 <= now.Hour() && now.Hour() < 12 {
+		aisatsu = "おはようございます！！！"
+	} else if 12 <= now.Hour() && now.Hour() < 16 {
+		aisatsu = "こんにちは！！！"
+	} else if 16 <= now.Hour() && now.Hour() < 23 {
+		aisatsu = "こんばんは！！！"
+	} else { // midnight
+		aisatsu = "夜分に失礼します！！！"
+	}
+	return fmt.Sprintf("%s 今日のおすすめチャンネルは……これ！！！！👉👉👉👉👉 %s 👈👈👈👈👈", aisatsu, channel)
+}
+
 func doIt(dryRun bool) {
 	apiKey, ok := os.LookupEnv("SLACK_TOKEN")
 	if !ok {
@@ -72,7 +87,7 @@ func doIt(dryRun bool) {
 	}
 
 	todaysRecommendChannel := chooseChannel(channelNames)
-	text := fmt.Sprintf("今日のおすすめチャンネルは……これ！！！！👉👉👉👉👉 %s 👈👈👈👈👈", todaysRecommendChannel)
+	text := buildText(todaysRecommendChannel)
 	log.Printf("message: %s", text)
 	if !dryRun {
 		log.Printf("post %s to %s", text, postChannelID)
