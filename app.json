@@ -1,0 +1,20 @@
+{
+    "name": "Slack recommend channel BOT",
+    "description": "SlackのチャンネルをおすすめしてくれるBOT",
+    "repository": "https://github.com/utgwkk/slack-recommend-channel-bot",
+    "keywords": ["slack", "bot"],
+    "env": {
+        "SLACK_TOKEN": {
+            "description": "Slack BOT token",
+            "required": true
+        },
+        "POST_CHANNEL_ID": {
+            "description": "Channel ID to post",
+            "required": true
+        }
+    },
+    "addons": ["scheduler"],
+    "formation": [
+        {"process": "web", "quantity": 0}
+    ]
+}
