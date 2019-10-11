@@ -1,4 +1,7 @@
 # slack-recommend-channel
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 Slackのチャンネルをランダムに1つピックアップするbot
 
 ```
