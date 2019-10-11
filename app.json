@@ -13,5 +13,8 @@
             "required": true
         }
     },
-    "addons": ["scheduler"]
+    "addons": ["scheduler"],
+    "formation": [
+        {"process": "web", "quantity": 0}
+    ]
 }
