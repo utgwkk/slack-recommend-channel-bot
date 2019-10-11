@@ -91,6 +91,8 @@ func doIt(dryRun bool) {
 	log.Printf("message: %s", text)
 	if !dryRun {
 		log.Printf("post %s to %s", text, postChannelID)
-		postMessage(api, postChannelID, text)
+		if _, _, err := postMessage(api, postChannelID, text); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
