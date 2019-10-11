@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 	"log"
 )
 
@@ -16,10 +16,6 @@ func main() {
 	flag.Parse()
 	if (dryRun) {
 		log.Println("dry-run mode.")
-	}
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
 	}
 	doIt(dryRun)
 }
