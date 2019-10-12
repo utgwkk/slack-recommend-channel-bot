@@ -4,6 +4,16 @@
 
 Slackのチャンネルをランダムに1つピックアップするbot
 
+## Herokuで動かす
+
+Heroku Schedulerで以下のコマンドを叩くように設定してください。タイムゾーンは適宜変更してください。
+
+```
+bin/slack-recommend-channel-bot -tz Asia/Tokyo
+```
+
+## サーバで動かす
+
 ```
 $ cat <<EOF > .env
 SLACK_TOKEN=xoxb-paste-your-slack-token-here
