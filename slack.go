@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/nlopes/slack"
@@ -28,10 +29,22 @@ func chooseChannel(channelNames []string) string {
 	return channelNames[index]
 }
 
-func filterChannels(channels []slack.Channel) []slack.Channel {
+func contains(xs []string, v string) bool {
+	for _, x := range xs {
+		if v == x {
+			return true
+		}
+	}
+	return false
+}
+
+func filterChannels(channels []slack.Channel, blackList []string) []slack.Channel {
 	var filtered []slack.Channel
 	for _, channel := range channels {
 		conversation := channel.GroupConversation.Conversation
+		if contains(blackList, channel.Name) {
+			continue
+		}
 		if channel.IsGeneral {
 			continue
 		}
@@ -61,6 +74,10 @@ func buildText(channel string) string {
 	return fmt.Sprintf("%s 今日のおすすめチャンネルは……これ！！！！👉👉👉👉👉 %s 👈👈👈👈👈", aisatsu, channel)
 }
 
+func parseBlackList(blackListEnv string) []string {
+	return strings.Split(blackListEnv, ",")
+}
+
 func doIt(dryRun bool) {
 	apiKey, ok := os.LookupEnv("SLACK_TOKEN")
 	if !ok {
@@ -70,6 +87,11 @@ func doIt(dryRun bool) {
 	if !ok {
 		log.Fatalln("Post destination channel ID not set in POST_CHANNEL_ID")
 	}
+	blackListEnv := os.Getenv("IGNORE_CHANNELS")
+	blackList := parseBlackList(blackListEnv)
+	if len(blackList) > 0 {
+		log.Printf("black list: %#v", blackList)
+	}
 
 	api := slack.New(apiKey)
 
@@ -77,7 +99,7 @@ func doIt(dryRun bool) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	channels = filterChannels(channels)
+	channels = filterChannels(channels, blackList)
 	log.Printf("number of target channels is %d\n", len(channels))
 
 	channelNames := make([]string, len(channels))
