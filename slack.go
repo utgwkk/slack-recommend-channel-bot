@@ -78,6 +78,28 @@ func parseBlackList(blackListEnv string) []string {
 	return strings.Split(blackListEnv, ",")
 }
 
+func getChannels(api *slack.Client) (channels []slack.Channel, err error) {
+	var nextCursor string
+
+	for i := 0; i < 10; i++ {
+		params := &slack.GetConversationsParameters{
+			Cursor:          nextCursor,
+			ExcludeArchived: "true",
+			Limit:           1000,
+		}
+		var xs []slack.Channel
+		xs, nextCursor, err = api.GetConversations(params)
+		if err != nil {
+			return nil, err
+		}
+		if len(xs) == 0 {
+			break
+		}
+		channels = append(channels, xs...)
+	}
+	return channels, nil
+}
+
 func doIt(dryRun bool) {
 	apiKey, ok := os.LookupEnv("SLACK_TOKEN")
 	if !ok {
@@ -95,7 +117,7 @@ func doIt(dryRun bool) {
 
 	api := slack.New(apiKey)
 
-	channels, err := api.GetChannels(true)
+	channels, err := getChannels(api)
 	if err != nil {
 		log.Fatalln(err)
 	}
