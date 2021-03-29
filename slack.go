@@ -86,6 +86,7 @@ func getChannels(api *slack.Client) (channels []slack.Channel, err error) {
 			Cursor:          nextCursor,
 			ExcludeArchived: "true",
 			Limit:           1000,
+			Types:           []string{"public_channel"},
 		}
 		var xs []slack.Channel
 		xs, nextCursor, err = api.GetConversations(params)
